@@ -35,6 +35,13 @@
       let dx = 2;
       let dy = -2;
 
+      /* paleta */
+      const paddleHeight = 10;
+      const paddleWidth = 75;
+
+      let paddleX = (canvas.width - paddleWidth) / 2;
+      let paddleY = canvas.height - paddleHeight - 10;
+
       function drawBall() {
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
@@ -42,14 +49,43 @@
         ctx.fill();
         ctx.closePath();
       }
-      function drawPaddle() {}
+      function drawPaddle() {
+        ctx.fillStyle = "#09f";
+        ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
+      }
       function drawBricks() {}
 
       function collisionDetection() {}
-      function ballMovement() {}
+      function ballMovement() {
+        // rebote en las paredes
+        if (
+          x + dx > canvas.width - ballRadius || // pared de la derecha
+          x + dx < ballRadius // pared de la izquierda
+        ) {
+          dx = -dx;
+        }
+
+        // rebote arriba
+        if (y + dy < ballRadius) {
+          dy = -dy;
+        }
+
+        // gameover
+        if (y + dy > canvas.height - ballRadius) {
+          console.log("game over");
+          document.location.reload();
+        }
+        x += dx;
+        y += dy;
+      }
       function paddleMovement() {}
 
+      function cleanCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
       function draw() {
+        cleanCanvas();
         // dibuijando objetos
         drawBall();
         drawPaddle();
